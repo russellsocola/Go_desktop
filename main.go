@@ -42,33 +42,97 @@
 
 //----------EJEMPLO 3 DEL USO DEL FYNE------
 
+// package main
+
+// import (
+// 	"fmt"
+// 	"time"
+
+// 	"fyne.io/fyne/v2/app"
+// 	"fyne.io/fyne/v2/widget"
+// )
+
+//la funcion establece el formato de hora HH:MM:ss
+
+// func updateTime(clock *widget.Label) {
+// 	formatted := time.Now().Format("Time: 03:04:05")
+// 	clock.SetText(formatted)
+// }
+// func main() {
+// 	a := app.New()
+// 	w := a.NewWindow("Clock") //nombre de la ventana emergente
+
+// 	clock := widget.NewLabel("")
+// 	w.SetContent(clock)
+// 	//la go func permite ejecutar en segundo plano, la go rutina
+// 	go func() {
+// 		for range time.Tick(time.Second) { //llamo a la funcion
+// 			updateTime(clock) //mando parametro a la funcion
+// 		}
+// 	}()
+
+// 	w.Resize(clock.MinSize()) //se ajusta a el tanaño del contenido
+// 	w.ShowAndRun()
+// 	fmt.Println("Se ejecuto con exito")
+// }
+
+//----------PARTE 4 MANEJO DE MULTI VENTANAS-----
+
+// package main
+
+// import (
+// 	"fyne.io/fyne/v2/app"
+// 	"fyne.io/fyne/v2/widget"
+// )
+
+// func main() {
+
+// 	a := app.New()
+// 	//se abriran dos ventanas simultaneamente
+// 	w := a.NewWindow("First Window")
+
+// 	w2 := a.NewWindow("Second Window")
+
+// 	//Añadimos contenido a las ventanas
+
+// 	w.SetContent(widget.NewLabel("Hola esta es la ventana uno de Russell"))
+//	w.Resize(fyne.NewSize(100, 100)) //Agregamos un tamaño definido a la ventana
+// 	//Agrego un master a la ventana principal (si se cierra esta ventana se cerrara todo)
+// 	w.SetMaster()
+
+// 	w.Show()
+
+// 	w2.SetContent(widget.NewLabel("Hola esta es la segunda ventana de Russell"))
+// 	w2.Show()
+
+// 	a.Run()
+
+// }
+
+//----------------PARTE 5 PRUEBA DDE APLICACACIONES GRAFICAS-----
+
 package main
 
 import (
-	"fmt"
-	"time"
-
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
-//la funcion establece el formato de hora HH:MM:ss
-func updateTime(clock *widget.Label) {
-	formatted := time.Now().Format("Time: 03:04:05")
-	clock.SetText(formatted)
+func makeUI() (*widget.Label, *widget.Entry) {
+	out := widget.NewLabel("Hello world!")
+	in := widget.NewEntry()
+
+	in.OnChanged = func(content string) {
+		out.SetText("Hello " + content + " !")
+	}
+	return out, in
 }
+
 func main() {
 	a := app.New()
-	w := a.NewWindow("Clock") //nombre de la ventana emergente
+	w := a.NewWindow("Hello Person")
 
-	clock := widget.NewLabel("")
-	w.SetContent(clock)
-	//la go func permite ejecutar en segundo plano, la go rutina
-	go func() {
-		for range time.Tick(time.Second) {
-			updateTime(clock)
-		}
-	}()
+	w.SetContent(container.NewVBox(makeUI()))
 	w.ShowAndRun()
-	fmt.Println("Se ejecuto con exito")
 }
